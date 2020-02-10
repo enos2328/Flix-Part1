@@ -20,7 +20,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.dataSource = self
         tableView.delegate = self
         
-//        print("Hello.") // deleted on walkthrough video
+        print("Hello.")
         
         let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")!
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
@@ -34,9 +34,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 self.movies = dataDictionary["results"] as! [[String: Any]]
                 
-                self.tableView.reloadData()
-                
-//                print(dataDictionary) // deleted on walkthrough video
+//                print(dataDictionary)
                 
                 // TODO: Get the array of movies
                 
@@ -44,55 +42,21 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 // TODO: Reload your table view data
                 
-                
             }
         }
         task.resume()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movies.count
+        return 50
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as! MovieCell
+        let cell = UITableViewCell()
         
-        let movie = movies[indexPath.row]
-        let title = movie["title"] as! String
-        let synopsis = movie["overview"] as! String
-        
-//        cell.textLabel!.text = title // don't need this one anymore // deleted on walkthrough video
-        cell.titleLabel.text = title //need this one instead of the above
-        cell.synopsisLabel.text = synopsis
-        
-        let baseUrl = "https://image.tmdb.org/t/p/w185"
-        let posterPath = movie["poster_path"] as! String
-        let posterUrl = URL(string : baseUrl + posterPath)
-        
-        cell.posterView.downloaded(from: posterUrl!)//using a school computer, so I couldn't download CocoaPods or AlamofireImage. My TA helped me go around it by creating the UIImageViewExtension.swift file and the code within it so that I can download the images using this line
+        cell.textLabel!.text = "row: \(indexPath.row)"
         
         return cell
-    }
-    
-    // NAVIGATION
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?){ //sender is the cell that was tapped on
-        // Get the new view controller using segue.destination
-        
-        
-        //Pass the selected object to the new view controller
-        
-        print("Loading up the details screen here.")
-        
-        //Find the selected movie
-        let cell = sender as! UITableViewCell
-        let indexPath = tableView.indexPath(for: cell)!
-        let movie = movies[indexPath.row]
-        
-        // Pass the selected movie to the details view controller
-        let detailsViewController = segue.destination as! MovieDetailsViewController
-        detailsViewController.movie = movie
-        
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
